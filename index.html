@@ -48,7 +48,7 @@
             font-weight: bold;
         }
         input[type="url"] {
-            width: 100%;
+            width: 70%; /* reduced width to make room for clock */
             padding: 20px;
             font-size: 18px;
             margin-bottom: 20px;
@@ -61,6 +61,20 @@
         input[type="url"]:focus {
             background-color: #666;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+       .clock-container {
+            display: inline-block;
+            width: 30%; /* added container for clock */
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #555;
+            color: #fff;
+        }
+       .clock {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
         }
         button[type="submit"] {
             padding: 10px 20px;
@@ -92,17 +106,33 @@
     <form id="redirectForm">
         <label for="websiteUrl">URL:</label>
         <input type="url" id="websiteUrl" name="websiteUrl" placeholder="https://example.com" required>
+        <div class="clock-container">
+            <div class="clock" id="clock"></div>
+        </div>
         <button type="submit">Go</button>
     </form>
 
     <script>
         const form = document.getElementById('redirectForm');
         const body = document.body;
+        const clockElement = document.getElementById('clock');
 
         // Toggle dark mode
         body.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
         });
+
+        // Clock functionality
+        function updateClock() {
+            const currentTime = new Date();
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const seconds = currentTime.getSeconds();
+            const clockString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            clockElement.textContent = clockString;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
 
         form.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -110,7 +140,7 @@
             const websiteUrl = document.getElementById('websiteUrl').value.trim();
 
             if (websiteUrl!== '') {
-                window.location.href = websiteUrl;
+               window.location.href = websiteUrl;
             } else {
                 alert('Please enter a valid URL');
             }
